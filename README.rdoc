@@ -1,0 +1,54 @@
+= Data Table
+
+Makes it easy to ship data to a jQuery DataTable from ActiveRecord or Mongoid.
+
+== Quick example:
+
+in your javascript:
+
+  $(".providers-data-table").dataTable({"bJQueryUI"       : true,
+                                        "bProcessing"     : true,
+                                        "bAutoWidth"      : false,
+                                        "sPaginationType" : "full_numbers",
+                                        "aoColumns"       : [{"sType" : "html"}, null, null, null, null],
+                                        "aaSorting"       : [[0, 'asc'], [1, 'asc']],
+                                        "bServerSide"     : true,
+                                        "sAjaxSource"     : "/providers.json" }).fnSetFilteringDelay();
+
+Note: the fnSetFilteringDelay() call isn't required but highly recommended: http://datatables.net/plug-ins/api#fnSetFilteringDelay
+
+in your controller:
+
+  class ProvidersController < ApplicationController
+
+    def index
+      respond_to do |wants|
+        wants.html
+        wants.json do
+          render(:json => Provider.for_data_table(self, %w(name fein category county state), %w(name fein)) do |provider|
+            ["<%= link_to(provider, provider) %>", provider.fein, provider.category, provider.county, provider.state]
+          end)
+        end
+      end
+    end
+
+  end
+
+in your view (assuming HAML):
+
+  %table.providers-data-table
+    %thead
+      %tr
+        %th Name
+        %th FEIN
+        %th Category
+        %th County
+        %th State
+
+    %tbody
+
+Patches welcome, enjoy!
+
+== Copyright
+
+Copyright (c) 2010 Jason Dew. See LICENSE for details.
