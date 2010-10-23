@@ -7,8 +7,8 @@ module DataTable
              paginate :page => _page(params), :per_page => params[:iDisplayLength]
       end
 
-      def _where_conditions raw_query, search_fields
-        return if (query = sanitize(raw_query)).blank?
+      def _where_conditions query, search_fields
+        return if query.blank?
 
         [search_fields.map {|field| ["#{field} LIKE ?"] }.join(" OR "), *(["%#{query}%"] * search_fields.size)]
       end

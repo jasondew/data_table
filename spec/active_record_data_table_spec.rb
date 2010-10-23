@@ -23,13 +23,11 @@ describe DataTable do
   context "#_where_conditions" do
 
     it "should return nil if the query is blank" do
-      mock(self).sanitize(:query) { "" }
-      send(:_where_conditions, :query, %w(foo bar baz)).should == nil
+      send(:_where_conditions, "", %w(foo bar baz)).should == nil
     end
 
     it "should return an AR array with an entry for each search field" do
-      mock(self).sanitize(:query) { "q" }
-      send(:_where_conditions, :query, %w(foo bar)).should == ["foo LIKE ? OR bar LIKE ?", "%q%", "%q%"]
+      send(:_where_conditions, "query", %w(foo bar)).should == ["foo LIKE ? OR bar LIKE ?", "%query%", "%query%"]
     end
 
   end
