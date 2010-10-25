@@ -27,7 +27,7 @@ describe DataTable do
     end
 
     it "should return an AR array with an entry for each search field" do
-      send(:_where_conditions, "query", %w(foo bar)).should == ["foo LIKE ? OR bar LIKE ?", "%query%", "%query%"]
+      send(:_where_conditions, "query", %w(foo bar)).should == ["UPPER(foo) LIKE ? OR UPPER(bar) LIKE ?", "%QUERY%", "%QUERY%"]
     end
 
   end
