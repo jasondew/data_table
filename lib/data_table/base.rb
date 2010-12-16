@@ -7,7 +7,7 @@ module DataTable
 
   module ClassMethods
     def for_data_table controller, fields, search_fields=nil, explicit_block=nil, &implicit_block
-      params = controller.params
+      params = controller.params.dup
       search_fields ||= fields
       block = (explicit_block or implicit_block)
 
