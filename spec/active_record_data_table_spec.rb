@@ -12,8 +12,9 @@ describe DataTable do
       mock(self)._where_conditions("answer", %w(foo bar)) { "where clause" }
       mock(self)._order_fields(params, %w(foo bar baz)) { "order" }
 
-      mock(self).where("where clause") { mock!.order("order") { mock!.paginate({:page => :page, :per_page => 10}) { :answer } } }
+      mock(self).where("where clause") { mock!.order("order") { mock!.paginate({:page => :page, :per_page => :per_page}) { :answer } } }
       mock(self)._page(params) { :page }
+      mock(self)._per_page(params) { :per_page }
 
       _find_objects(params, %w(foo bar baz), %w(foo bar)).should == :answer
     end

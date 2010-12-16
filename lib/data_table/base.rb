@@ -37,6 +37,14 @@ module DataTable
     def _page params
       params[:iDisplayStart].to_i / params[:iDisplayLength].to_i + 1
     end
+
+    def _per_page params
+      case (display_length = params[:iDisplayLength].to_i)
+        when -1 then self.count
+        when  0 then 25
+        else         display_length
+      end
+    end
   end
 
 end

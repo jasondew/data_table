@@ -4,7 +4,7 @@ module DataTable
       def _find_objects params, fields, search_fields
         self.where(_where_conditions params[:sSearch], search_fields).
              order(_order_fields params, fields).
-             paginate :page => _page(params), :per_page => params[:iDisplayLength]
+             paginate :page => _page(params), :per_page => _per_page(params)
       end
 
       def _where_conditions query, search_fields

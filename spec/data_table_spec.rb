@@ -63,4 +63,21 @@ describe DataTable do
 
   end
 
+  context "#_per_page" do
+
+    it "should return 10 given an iDisplayLength of 10" do
+      send(:_per_page, {:iDisplayLength => "10"}).should == 10
+    end
+
+    it "should return a default of 25 given an invalid iDisplayLength" do
+      send(:_per_page, {:iDisplayLength => "foobar"}).should == 25
+    end
+
+    it "should return self.count given an iDisplayLength of -1" do
+      mock(self).count { :all }
+      send(:_per_page, {:iDisplayLength => "-1"}).should == :all
+    end
+
+  end
+
 end
