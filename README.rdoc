@@ -25,8 +25,8 @@ in your controller:
       respond_to do |wants|
         wants.html
         wants.json do
-          render(:json => Provider.for_data_table(self, %w(name fein category county state), %w(name fein)) do |provider|
-            ["<%= link_to(provider, provider) %>", provider.fein, provider.category, provider.county, provider.state]
+          render(:json => Provider.for_data_table(self, %w(name fein categories.name county state), %w(name fein)) do |provider|
+            ["<%= link_to(provider, provider) %>", provider.fein, provider.category.name, provider.county, provider.state]
           end)
         end
       end
