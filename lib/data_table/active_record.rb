@@ -24,8 +24,10 @@ module DataTable
 
       def _where_conditions query, search_fields, date_search_fields
         return if query.blank?
-
-        [(search_fields.map {|field| ["UPPER(#{field}) LIKE ?"] } + date_search_fields.map {|field| ["#{field} LIKE ?"] }).join(" OR "), *(["%#{query.upcase}%"] * (search_fields.size + date_search_fields.size))]
+        string_fields = search_fields.map {|field| ["UPPER(#{field}) LIKE ?"] }
+        date_fields = date_search_fields.map {|field| ["#{field} LIKE ?"] }
+        date_fields ||= []
+        [(string_fields + date_fields).join(" OR "), *(["%#{query.upcase}%"] * (search_fields.size + date_search_fields.size))]
       end
 
       def _order_fields params, fields
