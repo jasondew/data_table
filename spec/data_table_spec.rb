@@ -21,14 +21,17 @@ describe DataTable do
 
       fields = %w(foo bar baz)
       search_fields = %w(foo bar)
+      date_search_fields = %w(foo)
       block = :block
+      
+      search_fields_without_dates = %w(bar)
 
       mock(self).count { 42 }
       objects = mock!.total_entries { 10 }.subject
-      mock(self)._find_objects(params, fields, search_fields) { objects }
+      mock(self)._find_objects(params, fields, search_fields_without_dates, date_search_fields) { objects }
       mock(self)._yield_and_render_array(controller, objects, block) { :results }
 
-      result = for_data_table(controller, fields, search_fields, block)
+      result = for_data_table(controller, fields, search_fields, date_search_fields, block)
       result.should == {:sEcho => 1, :iTotalRecords => 42, :iTotalDisplayRecords => 10, :aaData => :results}.to_json.html_safe
     end
 

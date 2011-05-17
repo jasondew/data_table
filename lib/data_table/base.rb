@@ -6,12 +6,17 @@ module DataTable
   end
 
   module ClassMethods
-    def for_data_table controller, fields, search_fields=nil, explicit_block=nil, &implicit_block
+    def for_data_table controller, fields, search_fields=nil, date_search_fields=nil, explicit_block=nil, &implicit_block
       params = controller.params.dup
       search_fields ||= fields
+      if date_search_fields then
+        search_fields.delete_if { |it|
+          date_search_fields.include? it
+        }
+      end
       block = (explicit_block or implicit_block)
 
-      objects = _find_objects params, fields, search_fields
+      objects = _find_objects params, fields, search_fields, date_search_fields
 
       {:sEcho                => params[:sEcho].to_i,
        :iTotalRecords        => self.count,
