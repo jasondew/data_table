@@ -36,9 +36,18 @@ describe DataTable do
 
   context "#_discover_joins" do
 
-     it "should return the joins on the fields" do
-       _discover_joins(%w(foo.bar foz.ber baz)).should == [:foo, :foz]
-     end
+    it "should return the joins on the fields" do
+      mock(self).new {self}
+      stub(self).foo {true}
+      stub(self).foz {true}
+      stub(self).furs {true}
+
+      joins = _discover_joins(%w(foo.bar foz.ber furs.bib nones.zip baz))
+      joins.should include :foo
+      joins.should include :foz
+      joins.should include :furs
+      joins.should_not include :nones
+    end
 
   end
 
