@@ -11,15 +11,21 @@ module DataTable
 
       def _discover_joins fields
         joins = Set.new
+        object = self.new
 
         fields.each { |it|
           field = it.split('.')
+
           if (field.size == 2) then
-            joins.add field[0].singularize.to_sym
+            if object.respond_to?(field[0].to_sym)
+              joins.add field[0].to_sym
+            elsif object.respond_to?(field[0].singularize.to_sym)
+              joins.add field[0].singularize.to_sym
+            end
           end
         }
 
-        joins.collect
+        joins.to_a
       end
 
       def _where_conditions query, search_fields
