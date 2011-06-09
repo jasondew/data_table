@@ -28,10 +28,48 @@ module DataTable
         joins.to_a
       end
 
-      def _where_conditions query, search_fields
+      def _where_conditions query, search_fields, join_operator = "OR"
         return if query.blank?
 
-        [search_fields.map {|field| ["UPPER(#{field}) LIKE ?"] }.join(" OR "), *(["%#{query.upcase}%"] * search_fields.size)]
+        conditions = []
+        parameters = []
+
+        search_fields.map do |field|
+          clause = _where_condition(query, field)
+          next if clause.empty?
+          conditions << clause.shift
+          parameters += clause
+        end
+
+        ["(" + conditions.join(" #{join_operator} ") + ")", *parameters.flatten]
+      end
+
+      def _where_condition query, field
+        return [] if query.blank?
+
+        if field.is_a? Array
+          options = field.extract_options!
+
+          if options[:split]
+            conditions = []
+            parameters = []
+            split_query = query.split(options[:split])
+
+            if split_query.size == field.size
+              field.map do |f|
+                conditions << "UPPER(#{f}) LIKE ?"
+                parameters << "%#{split_query.shift.upcase}%"
+              end
+              ["(" + conditions.join(" AND ") + ")", *parameters]
+            else
+              []
+            end
+          else
+            _where_conditions(query, field, "AND")
+          end
+        else
+          ["UPPER(#{field}) LIKE ?", "%#{query.upcase}%"]
+        end
       end
 
       def _order_fields params, fields

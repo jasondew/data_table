@@ -29,9 +29,30 @@ describe DataTable do
     end
 
     it "should return an AR array with an entry for each search field" do
-      send(:_where_conditions, "query", %w(foo bar)).should == ["UPPER(foo) LIKE ? OR UPPER(bar) LIKE ?", "%QUERY%", "%QUERY%"]
+      send(:_where_conditions, "query", %w(foo bar)).should == ["(UPPER(foo) LIKE ? OR UPPER(bar) LIKE ?)", "%QUERY%", "%QUERY%"]
     end
 
+    context "complex conditions" do
+      it "should return an AR array with an entry for each search field" do
+        send(:_where_conditions, "query", [%w(foo bar)]).should == ["((UPPER(foo) LIKE ? AND UPPER(bar) LIKE ?))", "%QUERY%", "%QUERY%"]
+      end
+
+      it "should return an AR array with an entry for each search field with a split query" do
+        send(:_where_conditions, "query-two", [['foo', 'bar', {:split => '-'}]]).should == ["((UPPER(foo) LIKE ? AND UPPER(bar) LIKE ?))", "%QUERY%", "%TWO%"]
+      end
+
+      it "should return an AR array with an entry for each search field with ands and ors" do
+        send(:_where_conditions, "query", ['foz', ['foo', 'bar']]).should == ["(UPPER(foz) LIKE ? OR (UPPER(foo) LIKE ? AND UPPER(bar) LIKE ?))", "%QUERY%", "%QUERY%", "%QUERY%"]
+      end
+
+      it "should return an AR array with an entry for each search field with ands and ors with a split query" do
+        send(:_where_conditions, "query-two", ['foz', ['foo', 'bar', {:split => '-'}]]).should == ["(UPPER(foz) LIKE ? OR (UPPER(foo) LIKE ? AND UPPER(bar) LIKE ?))", "%QUERY-TWO%", "%QUERY%", "%TWO%"]
+      end
+
+      it "should ignore a split query if the query isn't the size of the split fields" do
+        send(:_where_conditions, "query", ['foz', ['foo', 'bar', {:split => '-'}]]).should == ["(UPPER(foz) LIKE ?)", "%QUERY%"]
+      end
+    end
   end
 
   context "#_discover_joins" do
