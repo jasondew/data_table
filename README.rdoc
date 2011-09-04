@@ -47,8 +47,20 @@ in your view (assuming HAML):
 
     %tbody
 
-Patches welcome, enjoy!
+== Advanced Features
+
+=== Date fields
+
+In order to handle date fields properly, enclose the field name in an array along with a hash like so:
+
+  Provider.for_data_table(self, %w(name fein opened_on), ["name", "fein", ["opened_on", {:date => true}]]) { ... }
+
+=== Split fields
+
+To handle split fields, that is to handle searching for "x-y", add a hash with a split key:
+
+  Provider.for_data_table(self, %w(name fein suffix), ["name", ["fein", "suffix", {:split => "-"}]]) { ... }
 
 == Copyright
 
-Copyright (c) 2010 Jason Dew. See LICENSE for details.
+Copyright (c) 2010-2011 Jason Dew. See LICENSE for details.

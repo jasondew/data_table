@@ -38,6 +38,16 @@ describe DataTable do
       end
     end
 
+    context "with a date field" do
+      it "should return an AR array using equality and converting to a date" do
+        send(:_where_conditions, "2011/09/03", [["f1", {:date => true}]]).should == ["(f1 = ?)", Date.new(2011, 9, 3)]
+      end
+
+      it "should return an AR array properly not search date fields with non-dates" do
+        send(:_where_conditions, "foo", ["f1", ["f2", {:date => true}]]).should == ["(UPPER(f1) LIKE ?)", "%FOO%"]
+      end
+    end
+
     context "with complex conditions" do
       it "should return an AR array with an entry for each search field" do
         send(:_where_conditions, "query", [%w(foo bar)]).should == ["((UPPER(foo) LIKE ? AND UPPER(bar) LIKE ?))", "%QUERY%", "%QUERY%"]
