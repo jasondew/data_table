@@ -31,17 +31,24 @@ module DataTable
       def _where_conditions query, search_fields, join_operator = "OR"
         return if query.blank?
 
-        conditions = []
-        parameters = []
+        all_conditions = []
+        all_parameters = []
 
-        search_fields.map do |field|
-          clause = _where_condition(query, field)
-          next if clause.empty?
-          conditions << clause.shift
-          parameters += clause
+        query.split.each do |term|
+          conditions = []
+          parameters = []
+
+          search_fields.each do |field|
+            next if (clause = _where_condition(term, field.dup)).empty?
+            conditions << clause.shift
+            parameters += clause
+          end
+
+          all_conditions << conditions
+          all_parameters << parameters
         end
 
-        ["(" + conditions.join(" #{join_operator} ") + ")", *parameters.flatten]
+        [all_conditions.map {|conditions| "(" + conditions.join(" #{join_operator} ") + ")" }.join(" AND "), *all_parameters.flatten]
       end
 
       def _where_condition query, field

@@ -32,7 +32,13 @@ describe DataTable do
       send(:_where_conditions, "query", %w(foo bar)).should == ["(UPPER(foo) LIKE ? OR UPPER(bar) LIKE ?)", "%QUERY%", "%QUERY%"]
     end
 
-    context "complex conditions" do
+    context "with multiple terms" do
+      it "should return an AR array with conditions for all combinations of terms and fields" do
+        send(:_where_conditions, "q1 q2", %w(f1 f2)).should == ["(UPPER(f1) LIKE ? OR UPPER(f2) LIKE ?) AND (UPPER(f1) LIKE ? OR UPPER(f2) LIKE ?)", "%Q1%", "%Q1%", "%Q2%", "%Q2%"]
+      end
+    end
+
+    context "with complex conditions" do
       it "should return an AR array with an entry for each search field" do
         send(:_where_conditions, "query", [%w(foo bar)]).should == ["((UPPER(foo) LIKE ? AND UPPER(bar) LIKE ?))", "%QUERY%", "%QUERY%"]
       end
@@ -51,6 +57,11 @@ describe DataTable do
 
       it "should ignore a split query if the query isn't the size of the split fields" do
         send(:_where_conditions, "query", ['foz', ['foo', 'bar', {:split => '-'}]]).should == ["(UPPER(foz) LIKE ?)", "%QUERY%"]
+      end
+
+      it "should still work with multiple terms" do
+        send(:_where_conditions, "q1 q-2", ['F1', ['P1', 'P2', {:split => '-'}]]).should ==
+          ["(UPPER(F1) LIKE ?) AND (UPPER(F1) LIKE ? OR (UPPER(P1) LIKE ? AND UPPER(P2) LIKE ?))", "%Q1%", "%Q-2%", "%Q%", "%2%"]
       end
     end
   end
