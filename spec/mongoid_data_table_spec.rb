@@ -33,6 +33,10 @@ describe DataTable do
       send(:_where_conditions, "q", %w(foo bar)).should == {"$or" => [{"foo" => /q/i}, {"bar" => /q/i}]}
     end
 
+    it "should not use $or if there is only one search field" do
+      send(:_where_conditions, "q", %w(f)).should == {"f" => /q/i}
+    end
+
   end
 
   context "#_order_by_fields" do

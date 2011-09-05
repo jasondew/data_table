@@ -10,7 +10,11 @@ module DataTable
       def _where_conditions raw_query, search_fields
         return if (query = raw_query.gsub(/\//, "")).blank?
 
-        {"$or" => search_fields.map {|field| {field => /#{query}/i} }}
+        if search_fields.size == 1
+          {search_fields.first => /#{query}/i}
+        else
+          {"$or" => search_fields.map {|field| {field => /#{query}/i} }}
+        end
       end
 
       def _order_by_fields params, fields
