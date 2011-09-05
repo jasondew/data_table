@@ -19,7 +19,7 @@ module DataTable
           terms = query.strip.split(/\s+/)
 
           if terms.size == 1
-            {search_fields.first => /#{query}/i}
+            {search_fields.first => /#{terms.first}/i}
           else
             {search_fields.first => {"$all" => terms.map {|term| /#{term}/i }}}
           end

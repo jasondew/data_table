@@ -41,6 +41,10 @@ describe DataTable do
       it "should require a match for each term when there is a single search field" do
         send(:_where_conditions, "q1  q2", %w(f)).should == {"f" => {"$all" => [/q1/i, /q2/i]}}
       end
+
+      it "should require a match for each term when there is a single search field with spaces at the end" do
+        send(:_where_conditions, "q1   ", %w(f)).should == {"f" => /q1/i}
+      end
     end
 
   end
