@@ -39,7 +39,7 @@ describe DataTable do
 
     context "given multiple search terms" do
       it "should require a match for each term when there is a single search field" do
-        send(:_where_conditions, "q1 q2", %w(f)).should == {"f" => {"$all" => [/q1/i, /q2/i]}}
+        send(:_where_conditions, "q1  q2", %w(f)).should == {"f" => {"$all" => [/q1/i, /q2/i]}}
       end
     end
 

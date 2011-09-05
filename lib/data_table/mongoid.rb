@@ -16,7 +16,7 @@ module DataTable
         return if (query = raw_query.gsub(/\//, "")).blank?
 
         if search_fields.size == 1
-          terms = query.strip.split(/\s/)
+          terms = query.strip.split(/\s+/)
 
           if terms.size == 1
             {search_fields.first => /#{query}/i}
