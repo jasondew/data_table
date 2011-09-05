@@ -16,7 +16,13 @@ module DataTable
         return if (query = raw_query.gsub(/\//, "")).blank?
 
         if search_fields.size == 1
-          {search_fields.first => /#{query}/i}
+          terms = query.strip.split(/\s/)
+
+          if terms.size == 1
+            {search_fields.first => /#{query}/i}
+          else
+            {search_fields.first => {"$all" => terms.map {|term| /#{term}/i }}}
+          end
         else
           {"$or" => search_fields.map {|field| {field => /#{query}/i} }}
         end
