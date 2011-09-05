@@ -32,6 +32,27 @@ describe DataTable do
       result.should == {:sEcho => 1, :iTotalRecords => 42, :iTotalDisplayRecords => 10, :aaData => :results}.to_json.html_safe
     end
 
+    # won't work because of ruby 1.9.2 bug...  https://gist.github.com/455547
+#    it "should work with a pagination library that doesn't respond to #total_entries" do
+#      params = {:sSearch => "answer", :iSortCol_0 => "0", :sSortDir_0 => "desc", :iDisplayLength => "10", :sEcho => "1"}
+#      controller = mock!.params { params }.subject
+#
+#      fields = %w(foo bar baz)
+#      search_fields = %w(foo bar)
+#
+#      mock(self).count { 42 }
+#      mock(self)._matching_count(params, search_fields) { 10 }
+#      mock(self)._find_objects(params, fields, search_fields) { :objects }
+#      mock(self)._yield_and_render_array(controller, :objects, :block) { :results }
+#
+#      result = for_data_table(controller, fields, search_fields, :block)
+#      result.should == {:sEcho => 1, :iTotalRecords => 42, :iTotalDisplayRecords => 10, :aaData => :results}.to_json.html_safe
+#    end
+
+  end
+
+  context "#_yield_and_render_array" do
+
   end
 
   context "#_yield_and_render_array" do

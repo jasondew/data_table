@@ -12,10 +12,11 @@ module DataTable
       block = (explicit_block or implicit_block)
 
       objects = _find_objects params, fields, search_fields
+      matching_count = objects.respond_to?(:total_entries) ? objects.total_entries : _matching_count(params, search_fields)
 
       {:sEcho                => params[:sEcho].to_i,
        :iTotalRecords        => self.count,
-       :iTotalDisplayRecords => objects.total_entries,
+       :iTotalDisplayRecords => matching_count,
        :aaData               => _yield_and_render_array(controller, objects, block)
       }.to_json.html_safe
     end

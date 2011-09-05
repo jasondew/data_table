@@ -19,7 +19,6 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_dependency "rails", "~>3.0.0"
-  s.add_dependency "will_paginate", "3.0.pre2"
 
   s.add_development_dependency "rspec", "~>2.0.0"
   s.add_development_dependency "shoulda", "~>2.11.0"

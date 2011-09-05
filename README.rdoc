@@ -47,6 +47,14 @@ in your view (assuming HAML):
 
     %tbody
 
+and in your Gemfile
+
+  # for ActiveRecord
+  gem "will_paginate"
+
+  # for Mongoid
+  gem "kaminari"
+
 == Advanced Features
 
 === Date fields
