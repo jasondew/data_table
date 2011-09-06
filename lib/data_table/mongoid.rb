@@ -14,7 +14,6 @@ module DataTable
 
       def _where_conditions raw_query, search_fields
         query = _sanitize raw_query
-        ::Rails.logger.info "#{raw_query.inspect} => #{query.inspect}"
         return if (query = _sanitize raw_query).blank?
 
         if search_fields.size == 1
@@ -35,7 +34,7 @@ module DataTable
       end
 
       def _sanitize string
-        string.strip.gsub(/([\/\.\+\*\[\]\(\)])/) { "\\#{$1}" }
+        string.strip.gsub(/([\^\\\/\.\+\*\?\|\[\]\(\)\$])/) { "\\#{$1}" }
       end
     end
   end
