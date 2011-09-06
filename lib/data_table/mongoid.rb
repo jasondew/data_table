@@ -13,10 +13,12 @@ module DataTable
       end
 
       def _where_conditions raw_query, search_fields
-        return if (query = raw_query.gsub(/\//, "")).blank?
+        query = _sanitize raw_query
+        ::Rails.logger.info "#{raw_query.inspect} => #{query.inspect}"
+        return if (query = _sanitize raw_query).blank?
 
         if search_fields.size == 1
-          terms = query.strip.split(/\s+/)
+          terms = query.split(/\s+/)
 
           if terms.size == 1
             {search_fields.first => /#{terms.first}/i}
@@ -30,6 +32,10 @@ module DataTable
 
       def _order_by_fields params, fields
         [fields[params[:iSortCol_0].to_i], params[:sSortDir_0]]
+      end
+
+      def _sanitize string
+        string.strip.gsub(/([\/\.\+\*\[\]\(\)])/) { "\\#{$1}" }
       end
     end
   end

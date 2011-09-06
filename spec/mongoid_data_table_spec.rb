@@ -25,10 +25,6 @@ describe DataTable do
       send(:_where_conditions, "", %w(foo bar baz)).should == nil
     end
 
-    it "should strip out slashes" do
-      send(:_where_conditions, "//", %w(foo bar baz)).should == nil
-    end
-
     it "should return a mongoid $or hash with an entry for each search field" do
       send(:_where_conditions, "q", %w(foo bar)).should == {"$or" => [{"foo" => /q/i}, {"bar" => /q/i}]}
     end
@@ -58,4 +54,13 @@ describe DataTable do
     end
 
   end
+
+  context "#_sanitize" do
+
+    it "should escape characters for the regex" do
+      send(:_sanitize, "  /.+*[]()  ").should == "\\/\\.\\+\\*\\[\\]\\(\\)"
+    end
+
+  end
+
 end
