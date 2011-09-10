@@ -34,7 +34,7 @@ module DataTable
       end
 
       def _sanitize string
-        string.strip.gsub(/([\^\\\/\.\+\*\?\|\[\]\(\)\$])/) { "\\#{$1}" }
+        string.strip.gsub(/([\^\\\/\.\+\*\?\|\[\]\(\)\{\}\$])/) { "\\#{$1}" }
       end
     end
   end

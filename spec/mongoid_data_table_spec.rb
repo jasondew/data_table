@@ -58,7 +58,7 @@ describe DataTable do
   context "#_sanitize" do
 
     it "should escape characters for the regex" do
-      send(:_sanitize, "  ^\\/.+*?|[]()$  ").should == "\\^\\\\\\/\\.\\+\\*\\?\\|\\[\\]\\(\\)\\$"
+      send(:_sanitize, "  ^\\/.+*?|[](){}$  ").should == "\\^\\\\\\/\\.\\+\\*\\?\\|\\[\\]\\(\\)\\{\\}\\$"
     end
 
   end
