@@ -48,14 +48,20 @@ describe DataTable do
   context "#_order_by_fields" do
 
     it "should find the field name and pass the sort direction" do
-      send(:_order_by_fields,
-           {:iSortCol_0 => "1", :sSortDir_0 => "asc"},
-           %w(foo bar baz)).should == ["bar", "asc"]
+      send(:_order_by_fields, {:iSortCol_0 => "1", :sSortDir_0 => "asc"}, %w(foo bar baz)).should == ["bar", "asc"]
+    end
+
+    it "should use defaults if none are given" do
+      send(:_order_by_fields, {}, %w(foo bar baz)).should == ["foo", "asc"]
     end
 
   end
 
   context "#_sanitize" do
+
+    it "should work for nil" do
+      send(:_sanitize, nil).should == ""
+    end
 
     it "should escape characters for the regex" do
       send(:_sanitize, "  ^\\/.+*?|[](){}$  ").should == "\\^\\\\\\/\\.\\+\\*\\?\\|\\[\\]\\(\\)\\{\\}\\$"

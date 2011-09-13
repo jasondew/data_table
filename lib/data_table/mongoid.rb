@@ -30,11 +30,11 @@ module DataTable
       end
 
       def _order_by_fields params, fields
-        [fields[params[:iSortCol_0].to_i], params[:sSortDir_0]]
+        [fields[params[:iSortCol_0].to_i], params[:sSortDir_0] || "asc"]
       end
 
       def _sanitize string
-        string.strip.gsub(/([\^\\\/\.\+\*\?\|\[\]\(\)\{\}\$])/) { "\\#{$1}" }
+        string.to_s.strip.gsub(/([\^\\\/\.\+\*\?\|\[\]\(\)\{\}\$])/) { "\\#{$1}" }
       end
     end
   end
