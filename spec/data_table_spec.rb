@@ -69,6 +69,10 @@ describe DataTable do
   context "#_page" do
 
     context "with a display length of 10" do
+      it "should return 1 when display length is blank" do
+        send(:_page, {:iDisplayStart => "0"}).should == 1
+      end
+
       it "should return 1 when start is blank" do
         send(:_page, {:iDisplayStart => "", :iDisplayLength => "10"}).should == 1
       end
