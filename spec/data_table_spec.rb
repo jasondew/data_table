@@ -16,7 +16,8 @@ describe DataTable do
   context "#for_data_table" do
 
     it "should produce JSON for the datatables plugin to consume" do
-      params = {:sSearch => "answer", :iSortCol_0 => "0", :sSortDir_0 => "desc", :iDisplayLength => "10", :sEcho => "1"}
+      params = {sSearch: "answer", iSortCol_0: "0", sSortDir_0: "desc", iDisplayLength: "10", sEcho: "1"}
+      normalized_params = {ssearch: "answer", isortcol_0: "0", ssortdir_0: "desc", idisplaylength: "10", secho: "1"}
       controller = mock!.params { params }.subject
 
       fields = %w(foo bar baz)
@@ -25,7 +26,7 @@ describe DataTable do
 
       mock(self).count { 42 }
       objects = mock!.total_entries { 10 }.subject
-      mock(self)._find_objects(params, fields, search_fields) { objects }
+      mock(self)._find_objects(normalized_params, fields, search_fields) { objects }
       mock(self)._yield_and_render_array(controller, objects, block) { :results }
 
       result = for_data_table(controller, fields, search_fields, block)
@@ -70,15 +71,15 @@ describe DataTable do
 
     context "with a display length of 10" do
       it "should return 1 when start is blank" do
-        send(:_page, {:iDisplayStart => "", :iDisplayLength => "10"}).should == 1
+        send(:_page, {idisplaystart: "", idisplaylength: "10"}).should == 1
       end
 
       it "should return 1 when start is 0" do
-        send(:_page, {:iDisplayStart => "0", :iDisplayLength => "10"}).should == 1
+        send(:_page, {idisplaystart: "0", idisplaylength: "10"}).should == 1
       end
 
       it "should return 2 when start is 10" do
-        send(:_page, {:iDisplayStart => "10", :iDisplayLength => "10"}).should == 2
+        send(:_page, {idisplaystart: "10", idisplaylength: "10"}).should == 2
       end
     end
 
@@ -87,16 +88,16 @@ describe DataTable do
   context "#_per_page" do
 
     it "should return 10 given an iDisplayLength of 10" do
-      send(:_per_page, {:iDisplayLength => "10"}).should == 10
+      send(:_per_page, {idisplaylength: "10"}).should == 10
     end
 
     it "should return a default of 25 given an invalid iDisplayLength" do
-      send(:_per_page, {:iDisplayLength => "foobar"}).should == 25
+      send(:_per_page, {idisplaylength: "foobar"}).should == 25
     end
 
     it "should return self.count given an iDisplayLength of -1" do
       mock(self).count { :all }
-      send(:_per_page, {:iDisplayLength => "-1"}).should == :all
+      send(:_per_page, {idisplaylength: "-1"}).should == :all
     end
 
   end

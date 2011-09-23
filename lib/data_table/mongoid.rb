@@ -2,14 +2,14 @@ module DataTable
   module Mongoid
     module ClassMethods
       def _find_objects params, fields, search_fields
-        self.where(_where_conditions params[:sSearch], search_fields).
+        self.where(_where_conditions params[:ssearch], search_fields).
              order_by(_order_by_fields params, fields).
              page(_page params).
              per(_per_page params)
       end
 
       def _matching_count params, search_fields
-        self.where(_where_conditions params[:sSearch], search_fields).count
+        self.where(_where_conditions params[:ssearch], search_fields).count
       end
 
       def _where_conditions raw_query, search_fields
@@ -30,7 +30,7 @@ module DataTable
       end
 
       def _order_by_fields params, fields
-        [fields[params[:iSortCol_0].to_i], params[:sSortDir_0] || "asc"]
+        [fields[params[:isortcol_0].to_i], params[:ssortdir_0] || "asc"]
       end
 
       def _sanitize string

@@ -3,7 +3,7 @@ module DataTable
     module ClassMethods
 
       def _find_objects params, fields, search_fields
-        self.where(_where_conditions params[:sSearch], search_fields).
+        self.where(_where_conditions params[:ssearch], search_fields).
              includes(_discover_joins fields).
              order(_order_fields params, fields).
              paginate :page => _page(params), :per_page => _per_page(params)
@@ -95,8 +95,8 @@ module DataTable
       end
 
       def _order_fields params, fields
-        direction = params[:sSortDir_0] == "asc" ? "ASC" : "DESC"
-        %{#{fields[params[:iSortCol_0].to_i]} #{direction}}
+        direction = params[:ssortdir_0] == "asc" ? "ASC" : "DESC"
+        %{#{fields[params[:isortcol_0].to_i]} #{direction}}
       end
     end
   end

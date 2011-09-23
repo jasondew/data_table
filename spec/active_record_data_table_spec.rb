@@ -7,7 +7,7 @@ describe DataTable do
   context "#_find_objects" do
 
     it "should find the objects required based on the params" do
-      params = {:sSearch => "answer", :iSortCol_0 => "0", :sSortDir_0 => "desc", :iDisplayLength => 10, :sEcho => 1}
+      params = {:ssearch => "answer", :isortcol_0 => "0", :ssortdir_0 => "desc", :idisplaylength => 10, :secho => 1}
 
       mock(self)._discover_joins(%w(foo bar baz)) { [] }
       mock(self)._where_conditions("answer", %w(foo bar)) { "where clause" }
@@ -96,7 +96,7 @@ describe DataTable do
   context "#_order_fields" do
 
     it "should find the field name and pass the sort direction" do
-      send(:_order_fields, {:iSortCol_0 => "1", :sSortDir_0 => "asc"}, %w(foo bar baz)).should == "bar ASC"
+      send(:_order_fields, {:isortcol_0 => "1", :ssortdir_0 => "asc"}, %w(foo bar baz)).should == "bar ASC"
     end
 
   end

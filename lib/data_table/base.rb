@@ -7,14 +7,14 @@ module DataTable
 
   module ClassMethods
     def for_data_table controller, fields, search_fields=nil, explicit_block=nil, &implicit_block
-      params = controller.params.dup
+      params = Hash[*controller.params.map {|key, value| [key.to_s.downcase.to_sym, value] }.flatten]
       search_fields ||= fields
       block = (explicit_block or implicit_block)
 
       objects = _find_objects params, fields, search_fields
       matching_count = objects.respond_to?(:total_entries) ? objects.total_entries : _matching_count(params, search_fields)
 
-      {:sEcho                => params[:sEcho].to_i,
+      {:sEcho                => params[:secho].to_i,
        :iTotalRecords        => self.count,
        :iTotalDisplayRecords => matching_count,
        :aaData               => _yield_and_render_array(controller, objects, block)
@@ -36,11 +36,11 @@ module DataTable
     end
 
     def _page params
-      params[:iDisplayStart].to_i / params[:iDisplayLength].to_i + 1
+      params[:idisplaystart].to_i / params[:idisplaylength].to_i + 1
     end
 
     def _per_page params
-      case (display_length = params[:iDisplayLength].to_i)
+      case (display_length = params[:idisplaylength].to_i)
         when -1 then self.count
         when  0 then 25
         else         display_length
