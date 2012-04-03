@@ -73,6 +73,11 @@ describe DataTable do
         send(:_where_conditions, "q1 q-2", ['F1', ['P1', 'P2', {:split => '-'}]]).should ==
           ["(UPPER(F1) LIKE ?) AND (UPPER(F1) LIKE ? OR (UPPER(P1) LIKE ? AND UPPER(P2) LIKE ?))", "%Q1%", "%Q-2%", "%Q%", "%2%"]
       end
+
+      it "should not use like with a numeric split query" do
+        send(:_where_conditions, "101-04", [['foo', 'bar', {:split => '-', :types => [:numeric, :numeric]}]]).should ==
+          ["((foo = ? AND bar = ?))", 101, 4]
+      end
     end
   end
 

@@ -58,7 +58,7 @@ module DataTable
           options = field.extract_options!
 
           if options[:split]
-            _split_where_condition query, field, options[:split]
+            _split_where_condition query, field, options
           elsif options[:date]
             _date_where_condition query, field.first
           else
@@ -77,15 +77,21 @@ module DataTable
         end
       end
 
-      def _split_where_condition query, fields, splitter
+      def _split_where_condition query, fields, options
         conditions = []
         parameters = []
-        split_query = query.split splitter
+        split_query = query.split options[:split]
+        types = options[:types] || ([:string] * fields.size)
 
         if split_query.size == fields.size
-          fields.map do |f|
-            conditions << "UPPER(#{f}) LIKE ?"
-            parameters << "%#{split_query.shift.upcase}%"
+          fields.zip(split_query).zip(types).each do |((field, query), type)|
+            if type == :numeric
+              conditions << "#{field} = ?"
+              parameters << query.to_i
+            else
+              conditions << "UPPER(#{field}) LIKE ?"
+              parameters << "%#{query.upcase}%"
+            end
           end
 
           ["(" + conditions.join(" AND ") + ")", *parameters]
