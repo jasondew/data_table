@@ -25,7 +25,8 @@ module DataTable
             {search_fields.first => {"$all" => terms.map {|term| /#{term}/i }}}
           end
         else
-          {"$or" => search_fields.map {|field| {field => /#{query}/i} }}
+          terms = query.split(/\s+/)
+          {"$or" => search_fields.product(terms).map {|field, term| {field => /#{term}/i} }}
         end
       end
 
