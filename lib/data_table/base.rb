@@ -27,9 +27,10 @@ module DataTable
       objects.map do |object|
         block[object].map do |string|
           controller.instance_eval %{
-            Rails.logger.silence do
-              render_to_string :inline => %Q|#{string}|, :locals => {:#{self.name.underscore} => object}
-            end
+            log_level = Rails.logger.log_level
+            Rails.logger.log_level = :error
+            render_to_string :inline => %Q|#{string}|, :locals => {:#{self.name.underscore} => object}
+            Rails.logger.log_level = log_level
           }
         end
       end
