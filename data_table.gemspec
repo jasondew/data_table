@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Jason Dew"]
   s.email       = ["jason.dew@gmail.com"]
-  s.homepage    = "http://rubygems.org/gems/data_table"
+  s.homepage    = "https://github.com/jasondew/data_table"
   s.summary     = %q{Simple data preparation from AR/Mongoid to the jQuery DataTables plugin}
   s.description = %q{Simple data preparation from AR/Mongoid to the jQuery DataTables plugin}
 
