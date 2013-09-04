@@ -37,6 +37,8 @@ module DataTable
     end
 
     def _page params
+      return 1 if params[:idisplaystart].blank? or params[:idisplaylength].blank?
+
       params[:idisplaystart].to_i / params[:idisplaylength].to_i + 1
     end
 

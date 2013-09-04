@@ -25,8 +25,8 @@ describe DataTable do
       send(:_where_conditions, "", %w(foo bar baz)).should == nil
     end
 
-    it "should return a mongoid $or hash with an entry for each search field" do
-      send(:_where_conditions, "q", %w(foo bar)).should == {"$or" => [{"foo" => /q/i}, {"bar" => /q/i}]}
+    it "should return a mongoid $and wrapping an $or for each search field" do
+      send(:_where_conditions, "q", %w(foo bar)).should == {"$and" => [{"$or"=>[{"foo"=>/q/i}, {"bar"=>/q/i}]}]}
     end
 
     it "should not use $or if there is only one search field" do

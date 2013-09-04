@@ -33,22 +33,21 @@ describe DataTable do
       result.should == {:sEcho => 1, :iTotalRecords => 42, :iTotalDisplayRecords => 10, :aaData => :results}.to_json.html_safe
     end
 
-    # won't work because of ruby 1.9.2 bug...  https://gist.github.com/455547
-#    it "should work with a pagination library that doesn't respond to #total_entries" do
-#      params = {:sSearch => "answer", :iSortCol_0 => "0", :sSortDir_0 => "desc", :iDisplayLength => "10", :sEcho => "1"}
-#      controller = mock!.params { params }.subject
-#
-#      fields = %w(foo bar baz)
-#      search_fields = %w(foo bar)
-#
-#      mock(self).count { 42 }
-#      mock(self)._matching_count(params, search_fields) { 10 }
-#      mock(self)._find_objects(params, fields, search_fields) { :objects }
-#      mock(self)._yield_and_render_array(controller, :objects, :block) { :results }
-#
-#      result = for_data_table(controller, fields, search_fields, :block)
-#      result.should == {:sEcho => 1, :iTotalRecords => 42, :iTotalDisplayRecords => 10, :aaData => :results}.to_json.html_safe
-#    end
+    it "should work with a pagination library that doesn't respond to #total_entries" do
+      params = {:ssearch => "answer", :isortcol_0 => "0", :ssortdir_0 => "desc", :idisplaylength => "10", :secho => "1"}
+      controller = mock!.params { params }.subject
+
+      fields = %w(foo bar baz)
+      search_fields = %w(foo bar)
+
+      mock(self).count { 42 }
+      mock(self)._matching_count(params, search_fields) { 10 }
+      mock(self)._find_objects(params, fields, search_fields) { :objects }
+      mock(self)._yield_and_render_array(controller, :objects, :block) { :results }
+
+      result = for_data_table(controller, fields, search_fields, :block)
+      result.should == {:sEcho => 1, :iTotalRecords => 42, :iTotalDisplayRecords => 10, :aaData => :results}.to_json.html_safe
+    end
 
   end
 
@@ -77,6 +76,11 @@ describe DataTable do
       it "should return 2 when start is 10" do
         send(:_page, {idisplaystart: "10", idisplaylength: "10"}).should == 2
       end
+
+      it "should default to 1 when idisplaystart or idisplaylength are missing" do
+        send(:_page, {}).should == 1
+      end
+
     end
 
   end
@@ -94,6 +98,10 @@ describe DataTable do
     it "should return self.count given an iDisplayLength of -1" do
       mock(self).count { :all }
       send(:_per_page, {idisplaylength: "-1"}).should == :all
+    end
+
+    it "should default to 10 if idisplaylength is missing" do
+      send(:_per_page, {}).should == 25
     end
 
   end

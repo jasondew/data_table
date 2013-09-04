@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", "~>3.0"
 
-  s.add_development_dependency "rspec", "~>2.0.0"
-  s.add_development_dependency "shoulda", "~>2.11.0"
-  s.add_development_dependency "rr", "~>1.0.0"
+  s.add_development_dependency "rspec", "~>2.0"
+  s.add_development_dependency "shoulda", "~>2.11"
+  s.add_development_dependency "rr", "~>1.0"
 end
