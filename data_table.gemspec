@@ -10,6 +10,7 @@ Gem::Specification.new do |s|
   s.homepage    = "https://github.com/jasondew/data_table"
   s.summary     = %q{Simple data preparation from AR/Mongoid to the jQuery DataTables plugin}
   s.description = %q{Simple data preparation from AR/Mongoid to the jQuery DataTables plugin}
+  s.license     = "MIT"
 
   s.rubyforge_project = "data_table"
 
