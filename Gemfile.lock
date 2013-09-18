@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    data_table (0.4.9)
+    data_table (0.4.10)
       rails (>= 3.0)
 
 GEM
