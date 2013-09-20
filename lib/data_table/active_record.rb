@@ -101,9 +101,9 @@ module DataTable
 
       def _date_where_condition query, field
         begin
-          ["#{field} = ?", Date.parse(query)]
+          ["#{field}::date = ?", Date.parse(query)]
         rescue ArgumentError
-          []
+          ["NULL!= ?", nil]
         end
       end
 
