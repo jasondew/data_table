@@ -132,7 +132,11 @@ module DataTable
 
       def _order_fields params, fields
         direction = params[:ssortdir_0] == "asc" ? "ASC" : "DESC"
-        %{#{fields[params[:isortcol_0].to_i]} #{direction}}
+        if fields[params[:isortcol_0].to_i].is_a? Array
+					%{#{fields[params[:isortcol_0].to_i].first} #{direction}}
+				else
+					%{#{fields[params[:isortcol_0].to_i]} #{direction}}
+				end
       end
 			
 			def _search_params params
