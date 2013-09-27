@@ -17,6 +17,8 @@ module DataTable
           field = it.split('.')
 
           if (field.size == 2) then
+            next if object.class.name.downcase == field[0].singularize
+
             if object.respond_to?(field[0].to_sym)
               joins.add field[0].to_sym
             elsif object.respond_to?(field[0].singularize.to_sym)
