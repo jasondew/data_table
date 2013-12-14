@@ -53,10 +53,6 @@ describe DataTable do
 
   context "#_yield_and_render_array" do
 
-  end
-
-  context "#_yield_and_render_array" do
-
     it "should walk through the array and render it, passing in the appropriate local name" do
       block = lambda {|x| mock!.map { [42] }.subject }
 

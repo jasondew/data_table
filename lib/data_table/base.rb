@@ -26,9 +26,10 @@ module DataTable
     def _yield_and_render_array controller, objects, block
       objects.map do |object|
         block[object].map do |string|
+          safe_string = string.gsub("|", " ")
           controller.instance_eval %{
             log_level, Rails.logger.level = Rails.logger.level, Logger::ERROR
-            render_to_string(:inline => %q|#{string}|, :locals => {:#{self.name.underscore} => object}).tap do
+            render_to_string(:inline => %q|#{safe_string}|, :locals => {:#{self.name.underscore} => object}).tap do
               Rails.logger.level = log_level
             end
           }
