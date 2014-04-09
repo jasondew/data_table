@@ -4,7 +4,11 @@ module DataTable
 
       def _find_objects params, fields, search_fields
         self.where(_where_conditions params[:ssearch], search_fields).
-             includes(_discover_joins fields).
+             includes(_discover_joins fields).tap do |query|
+               if query.respond_to?(:references!)
+                 query.references!(_discover_joins fields)
+               end
+             end.
              order(_order_fields params, fields).
              paginate :page => _page(params), :per_page => _per_page(params)
       end
