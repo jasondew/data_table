@@ -54,6 +54,11 @@ and in your Gemfile
 
   # for Mongoid
   gem "kaminari"
+  
+If using *Mongoid* add this to your model
+
+  include Mongoid::DataTable
+
 
 == Advanced Features
 
