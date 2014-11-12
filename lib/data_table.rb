@@ -1,6 +1,12 @@
 require "rails"
 require "active_support/core_ext/object/blank"
-require "active_support/core_ext/object/to_json"
+
+begin
+  require "active_support/core_ext/object/json"
+rescue LoadError
+  require "active_support/core_ext/object/to_json" rescue LoadError
+end
+
 require "active_support/json/encoding"
 require "active_support/core_ext/string/output_safety"
 require "active_support/core_ext/string/inflections"
