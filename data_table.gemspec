@@ -1,27 +1,24 @@
-$:.push File.expand_path("../lib", __FILE__)
+# coding: utf-8
+lib = File.expand_path("../lib", __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "data_table/version"
 
-Gem::Specification.new do |s|
-  s.name        = "data_table"
-  s.version     = DataTable::VERSION
-  s.platform    = Gem::Platform::RUBY
-  s.authors     = ["Jason Dew"]
-  s.email       = ["jason.dew@gmail.com"]
-  s.homepage    = "https://github.com/jasondew/data_table"
-  s.summary     = %q{Simple data preparation from AR/Mongoid to the jQuery DataTables plugin}
-  s.description = %q{Simple data preparation from AR/Mongoid to the jQuery DataTables plugin}
-  s.license     = "MIT"
+Gem::Specification.new do |spec|
+  spec.name          = "data_table"
+  spec.version       = DataTable::VERSION
+  spec.authors       = ["Jason Dew"]
+  spec.email         = ["jason.dew@gmail.com"]
+  spec.summary       = %q{Simple data preparation from ActiveRecord/Mongoid to the jQuery DataTables plugin}
+  spec.description   = %q{Simple data preparation from ActiveRecord/Mongoid to the jQuery DataTables plugin}
+  spec.homepage      = ""
+  spec.license       = "MIT"
 
-  s.rubyforge_project = "data_table"
+  spec.files         = `git ls-files -z`.split("\x0")
+  spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
+  spec.test_files    = spec.files.grep(%r{^spec/})
+  spec.require_paths = ["lib"]
 
-  s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
-  s.require_paths = ["lib"]
-
-  s.add_dependency "rails", ">=3.0"
-
-  s.add_development_dependency "rspec", "~>2.0"
-  s.add_development_dependency "shoulda", "~>2.11"
-  s.add_development_dependency "rr", "~>1.0"
+  spec.add_development_dependency "bundler", "~> 1.7"
+  spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency "rspec"
 end
