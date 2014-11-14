@@ -30,6 +30,18 @@ module DataTable
       end
     end
 
+    def order_by
+      if name
+        name
+      else
+        definition[:order_by]
+      end
+    end
+
+    def ordering
+      definition[:ordering]
+    end
+
     def searchable?
       if definition.respond_to?(:to_h)
         definition[:searchable] != false

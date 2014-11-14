@@ -12,7 +12,7 @@ module DataTable
 
     #ORM-dependent
     def current_page
-      filtered.order_by([order_column.name, order_direction])
+      filtered.order_by([order_column.order_by, order_direction])
               .page(page)
               .per(per_page)
     end

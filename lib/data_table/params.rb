@@ -17,11 +17,11 @@ module DataTable
     end
 
     def sort_column_number
-      Integer(params[:iSortCol_0] || params[:order][0][:column])
+      (params[:iSortCol_0] || params.fetch(:order, [{}])["0"][:column]).to_i
     end
 
     def sort_direction
-      params[:sSortDir_0] || params[:order][0][:dir] || "asc"
+      params[:sSortDir_0] || params.fetch(:order, [{}])["0"][:dir] || "asc"
     end
 
     def view_context
