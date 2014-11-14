@@ -1,16 +1,16 @@
 module DataTable
   class Renderer
-    attr_reader :params, :columns, :data_store
+    attr_reader :params, :columns, :data_source
 
-    def initialize(params:, columns:, data_store:)
-      @params, @columns, @data_store = params, columns, data_store
+    def initialize(params:, columns:, data_source:)
+      @params, @columns, @data_source = params, columns, data_source
     end
 
     def as_json(*)
       {
         draw: params.draw,
-        recordsTotal: data_store.total_count,
-        recordsFiltered: data_store.filtered_count,
+        recordsTotal: data_source.total_count,
+        recordsFiltered: data_source.filtered_count,
         data: formatted_data
       }
     rescue StandardError => exception
@@ -21,7 +21,7 @@ module DataTable
 
     def formatted_data
       @formatted_data ||= begin
-        data_store.current_page.map do |datum|
+        data_source.current_page.map do |datum|
           columns.map do |column|
             column.render params.view_context, datum
           end

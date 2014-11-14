@@ -1,5 +1,5 @@
 module DataTable
-  DataStore = Struct.new(:data, :params, :columns) do
+  DataSource = Struct.new(:data, :params, :columns) do
     #ORM-dependent
     def total_count
       @total_count ||= data.count

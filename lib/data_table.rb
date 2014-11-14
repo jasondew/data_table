@@ -1,15 +1,15 @@
 require "data_table/version"
 require "data_table/params"
-require "data_table/data_store"
+require "data_table/data_source"
 require "data_table/renderer"
 require "data_table/columns"
 
-def DataTable(context:, columns:, data: nil, data_store: nil)
+def DataTable(context:, columns:, data: nil, data_source: nil)
   params = DataTable::Params.new context
   columns = DataTable::Columns.new columns
-  data_store ||= DataTable::DataStore.new data, params, columns
+  data_source ||= DataTable::DataSource.new data, params, columns
 
   DataTable::Renderer.new params: params,
                           columns: columns,
-                          data_store: data_store
+                          data_source: data_source
 end
