@@ -12,12 +12,12 @@ module DataTable
 
     #ORM-dependent
     def current_page
-      filtered.order_by(order)
+      filtered.order_by([order_column.name, order_direction])
               .page(page)
               .per(per_page)
     end
 
-    private
+    protected
 
     #ORM-dependent
     def filtered
@@ -46,11 +46,12 @@ module DataTable
       Regexp.new Regexp.escape(string), "i"
     end
 
-    def order
-      [
-        columns[params.sort_column_number].name,
-        params.sort_direction
-      ]
+    def order_column
+      columns[params.sort_column_number]
+    end
+
+    def order_direction
+      params.sort_direction
     end
 
     def page
