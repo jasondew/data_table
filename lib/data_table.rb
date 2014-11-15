@@ -4,9 +4,9 @@ require "data_table/data_source"
 require "data_table/renderer"
 require "data_table/columns"
 
-def DataTable(context:, columns:, data: nil, data_source: nil)
+def DataTable(context:, columns:, data: nil, data_source: nil, search_fields: nil)
   params = DataTable::Params.new context
-  columns = DataTable::Columns.new columns
+  columns = DataTable::Columns.new columns, search_fields
   data_source ||= DataTable::DataSource.new data, params, columns
 
   DataTable::Renderer.new params: params,

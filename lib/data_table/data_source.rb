@@ -27,19 +27,32 @@ module DataTable
     #ORM-dependent
     def conditions
       return if params.query.to_s !~ /[^[:space:]]/
-      query_terms = params.query.split(/\s+/)
 
       if columns.searchable.size == 1
-        search_field = search_field.first
-
-        if query_terms.size == 1
-          {search_field => regexp(query_terms.first)}
-        else
-          {search_field => {"$all" => query_terms.map(&method(:regexp))}}
-        end
+        single_column_conditions columns.searchable.first
       else
-        {"$and" => query_terms.map {|term| {"$or" => columns.searchable.map {|column| {column.name => regexp(term)} }}}}
+        multiple_column_conditions columns.searchable
       end
+    end
+
+    def single_column_conditions(name)
+      if query_terms.size == 1
+        {name => regexp(query_terms.first)}
+      else
+        {name => {"$all" => query_terms.map(&method(:regexp))}}
+      end
+    end
+
+    def multiple_column_conditions(search_fields)
+      {"$and" => query_terms.map {|term| term_conditions(search_fields, term) }}
+    end
+
+    def term_conditions(search_fields, term)
+      {"$or" => search_fields.map {|name| {name => regexp(term)} }}
+    end
+
+    def query_terms
+      params.query.split(/\s+/)
     end
 
     def regexp(string)

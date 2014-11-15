@@ -4,8 +4,9 @@ module DataTable
 
     def_delegators :columns, :[], :each, :map
 
-    def initialize(definitions)
+    def initialize(definitions, search_fields=nil)
       self.columns = definitions.map {|definition| Column.new definition }
+      self.search_fields = search_fields.map(&:to_s) if search_fields
     end
 
     def names
@@ -13,12 +14,16 @@ module DataTable
     end
 
     def searchable
-      columns.select(&:searchable?)
+      if search_fields
+        search_fields
+      else
+        columns.select(&:searchable?).map(&:name)
+      end
     end
 
     private
 
-    attr_accessor :columns
+    attr_accessor :columns, :search_fields
   end
 
   Column = Struct.new(:definition) do
@@ -31,10 +36,10 @@ module DataTable
     end
 
     def order_by
-      if name
-        name
-      else
+      if definition.respond_to?(:to_h) && definition[:order_by]
         definition[:order_by]
+      else
+        name
       end
     end
 
@@ -51,10 +56,14 @@ module DataTable
     end
 
     def render(view_context, datum)
-      if definition.respond_to?(:to_h) && definition[:presenter]
-        view_context.instance_exec datum, &definition[:presenter]
+      if definition.respond_to?(:to_h)
+        if (presenter = definition[:presenter])
+          view_context.instance_exec datum, &definition[:presenter]
+        else
+          datum.send name
+        end
       else
-        datum.send name
+        datum.send definition
       end
     end
   end

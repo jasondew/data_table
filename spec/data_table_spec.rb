@@ -94,6 +94,40 @@ describe DataTable do
     ).to eq(expected_json)
   end
 
+  it "accepts search_fields as an override" do
+    posts.stubs(:where)
+         .with({"author" => /awesome/i})
+         .returns(filtered = stub)
+    filtered.stubs count: 75
+    filtered.stubs(:order_by).with([:name, "desc"]).returns(filtered)
+    filtered.stubs(:page).with(1).returns(filtered)
+    filtered.stubs(:per).with(10).returns([post1, post2])
+
+    expect(
+      DataTable(context: context(params_v1),
+                data: posts,
+                columns: columns,
+                search_fields: %w{author}).as_json
+    ).to eq(expected_json)
+  end
+
+  it "accepts search_fields with multiple values as an override" do
+    posts.stubs(:where)
+         .with({"$and" => [{"$or" => [{"name" => /awesome/i}, {"author" => /awesome/i}]}]})
+         .returns(filtered = stub)
+    filtered.stubs count: 75
+    filtered.stubs(:order_by).with([:name, "desc"]).returns(filtered)
+    filtered.stubs(:page).with(1).returns(filtered)
+    filtered.stubs(:per).with(10).returns([post1, post2])
+
+    expect(
+      DataTable(context: context(params_v1),
+                data: posts,
+                columns: columns,
+                search_fields: %w{name author}).as_json
+    ).to eq(expected_json)
+  end
+
   private
 
   def context(params)
