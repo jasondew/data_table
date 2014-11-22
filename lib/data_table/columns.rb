@@ -49,7 +49,7 @@ module DataTable
 
     def searchable?
       if definition.respond_to?(:to_h)
-        definition[:searchable] != false
+        !! definition[:searchable]
       else
         true
       end
