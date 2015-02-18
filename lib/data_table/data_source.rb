@@ -75,7 +75,7 @@ module DataTable
 
     def per_page
       case params.limit
-        when -1 then full_count
+        when -1 then total_count
         when  0 then 25
         else params.limit
       end
