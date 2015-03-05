@@ -6,10 +6,16 @@ require "data_table/columns"
 require "data_table/rails_engine"
 require "legacy"
 
-def DataTable(context:, columns:, data: nil, data_source: nil, search_fields: nil)
+def DataTable context:,
+              columns:,
+              data: nil,
+              search_fields: nil,
+              data_source_builder: ->(params, columns) {
+                DataTable::DataSource.new data, params, columns
+              }
   params = DataTable::Params.new context
   columns = DataTable::Columns.new columns, search_fields
-  data_source ||= DataTable::DataSource.new data, params, columns
+  data_source = data_source_builder.call(params, columns)
 
   DataTable::Renderer.new params: params,
                           columns: columns,
