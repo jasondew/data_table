@@ -7,7 +7,12 @@ module DataTable
 
   module ClassMethods
     def for_data_table controller, fields, search_fields=nil, explicit_block=nil, &implicit_block
-      params = Hash[*controller.params.map {|key, value| [key.to_s.downcase.to_sym, value] }.flatten]
+      incoming_params = if controller.params.respond_to?(:permit) then
+                          controller.params.permit(:sSearch, :sEcho, :iDisplayStart, :iDisplayLength, :iSortCol_0, :sSortDir_0)
+                        else
+                          controller.params
+                        end
+      params = Hash[*incoming_params.to_h.map {|key, value| [key.to_s.downcase.to_sym, value] }.flatten]
       search_fields ||= fields
       block = (explicit_block or implicit_block)
 

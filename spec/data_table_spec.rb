@@ -1,4 +1,5 @@
 require "spec_helper"
+require "action_controller/metal/strong_parameters"
 
 describe DataTable do
 
@@ -16,9 +17,9 @@ describe DataTable do
   context "#for_data_table" do
 
     it "should produce JSON for the datatables plugin to consume" do
-      params = {sSearch: "answer", iSortCol_0: "0", sSortDir_0: "desc", iDisplayLength: "10", sEcho: "1"}
+      params = ActionController::Parameters.new(sSearch: "answer", iSortCol_0: "0", sSortDir_0: "desc", iDisplayLength: "10", sEcho: "1")
       normalized_params = {ssearch: "answer", isortcol_0: "0", ssortdir_0: "desc", idisplaylength: "10", secho: "1"}
-      controller = mock!.params { params }.subject
+      controller = stub!.params { params }.subject
 
       fields = %w(foo bar baz)
       search_fields = %w(foo bar)
@@ -35,7 +36,7 @@ describe DataTable do
 
     it "should work with a pagination library that doesn't respond to #total_entries" do
       params = {:ssearch => "answer", :isortcol_0 => "0", :ssortdir_0 => "desc", :idisplaylength => "10", :secho => "1"}
-      controller = mock!.params { params }.subject
+      controller = stub!.params { params }.subject
 
       fields = %w(foo bar baz)
       search_fields = %w(foo bar)
