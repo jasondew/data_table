@@ -26,7 +26,7 @@ module DataTable
 
     #ORM-dependent
     def conditions
-      return if params.query.to_s !~ /[^[:space:]]/
+      return {} if params.query.to_s !~ /[^[:space:]]/
 
       if columns.searchable.size == 1
         single_column_conditions columns.searchable.first
